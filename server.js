@@ -13,7 +13,9 @@ const quotes = require('./quotes.json');
 //   /quotes            - Should return all quotes (json)
 //   /quotes/random     - Should return ONE quote (json)
 app.get('/', function (request, response) {
-  response.send("Neill's Quote Server!  Ask me for /quotes/random, or /quotes");
+  response.send(
+    "Neill's Quote Server!  Ask me for go /quotes/random, or /quotes"
+  );
 });
 
 //START OF YOUR CODE...
@@ -36,6 +38,21 @@ app.get('/quotes/search', function (request, response) {
             quote.author.toUpperCase().includes(searchWord.toUpperCase())
         )
       );
+  }
+});
+
+app.put('/quotes/:quoteId', function (request, response) {
+  const { quoteId } = request.params;
+  const index = quotes.findIndex((quote) => quote.id == quoteId);
+  if (index >= 0) {
+    quotes[index] = {
+      id: quotes[index].id,
+      quote: 'Quote replaced',
+      author: "Somebody's son",
+    };
+    response.status(200).json(quotes);
+  } else {
+    response.status(400).json(`No quote with id of ${quoteId}`);
   }
 });
 //...END OF YOUR CODE
